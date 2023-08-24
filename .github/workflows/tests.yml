@@ -28,6 +28,7 @@ jobs:
       - name: Copy .env file
         run: |
           cp .env.ci .env
+          cp .env.ci .env.testing
 
       - name: Run composer
         run: |
@@ -36,4 +37,16 @@ jobs:
       - name: Run test suits
         run: |
           php artisan test
+        env:
+          DB_DATABASE: cicd_testing
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_EMPTY_PASSWORD: yes
+          MYSQL_DATABASE:
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout:5s --health-retries=3
+
 name: Tests
