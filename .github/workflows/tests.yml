@@ -11,16 +11,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v2
+        with:
+          path: vendor
+          key: composer-${{ hasFiles('**/composer.lock') }}
+          restore-keys: |
+            composer-
+
       - name: Install PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.2
+
       - name: Copy .env file
         run: |
           cp .env.ci .env
+
       - name: Run composer
         run: |
           composer install --no-interaction
+
       - name: Run test suits
         run: |
           php artisan test
