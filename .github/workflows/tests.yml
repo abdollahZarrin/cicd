@@ -16,7 +16,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: vendor
-          key: composer-${{ hasFiles('**/composer.lock') }}
+          key: composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             composer-
 
